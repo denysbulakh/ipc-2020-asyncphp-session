@@ -71,3 +71,8 @@
 `git checkout step-3`
 - Refactor usage of EventLoop
 - Promise any / all
+
+### Step 4
+`git checkout step-4`
+- Swoole
+- Coroutines
