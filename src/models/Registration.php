@@ -23,9 +23,17 @@ class Registration
     {
         \Swoole\Runtime::enableCoroutine();
         $that = $this;
+        $chan = new \Swoole\Coroutine\Channel(1);
 
-        go(function() use ($taskDeferred, $that) {
-            if (RegisterRequest::send($that->getTicketCode(), $that->getProviderId())) {
+        //producer
+        go(function() use ($chan, $that) {
+            $chan->push([$that->getTicketCode(), $that->getProviderId()]);
+        });
+
+        //consumer
+        go(function() use ($chan, $taskDeferred, $that) {
+            $data = $chan->pop();
+            if (RegisterRequest::send($data[0], $data[1])) {
                 $taskDeferred->resolve($that);
             } else {
                 $taskDeferred->reject();

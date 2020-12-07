@@ -76,3 +76,7 @@
 `git checkout step-4`
 - Swoole
 - Coroutines
+
+### Step 5
+`git checkout step-5`
+- Channels for sharing between the coroutines
