@@ -66,3 +66,8 @@
 `git checkout step-2`
 - EventLoop
 - ChildProcess
+
+### Step 3
+`git checkout step-3`
+- Refactor usage of EventLoop
+- Promise any / all

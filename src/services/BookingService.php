@@ -7,23 +7,16 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 use Bulakh\Models\Booking;
 use Bulakh\Models\Ticket;
+use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
 
 class BookingService
 {
-    public static function createBookingPromise(): Deferred
+    public static function createBookingPromise(LoopInterface $loop): Deferred
     {
         $deferred = new Deferred();
         $deferred->promise()
-            ->then(function (Booking $booking) use ($deferred) {
-                $ticket = new Ticket();
-                $booking->setTicket($ticket);
-                return $booking;
-            })
-            ->then(function (Booking $booking) use ($deferred) {
-                RegisterService::registerBooking($booking);
-                return $booking;
-            })
             ->then(function (Booking $booking) use ($deferred) {
                 $booking->save();
                 return $booking;
@@ -32,17 +25,21 @@ class BookingService
         return $deferred;
     }
 
-    public static function createBooking(Deferred $deferredBooking): void
+    public static function createBooking(Deferred $deferredBooking, LoopInterface $loop): void
     {
+        $ticket = new Ticket();
         $booking = new Booking();
-        $deferredBooking->resolve($booking);
+        $booking->setTicket($ticket);
+
+        RegisterService::registerBooking($booking, $deferredBooking, $loop);
     }
 
     public static function createBookingCmd(): void
     {
         $timeMarker = microtime(true);
 
-        $deferredBooking = self::createBookingPromise();
+        $loop = Factory::create();
+        $deferredBooking = self::createBookingPromise($loop);
 
         $deferredBooking->promise()->done(
             function (Booking $booking) use ($timeMarker) {
@@ -56,6 +53,10 @@ class BookingService
             }
         );
 
-        self::createBooking($deferredBooking);
+        $loop->futureTick(function() use ($deferredBooking, $loop) {
+            self::createBooking($deferredBooking, $loop);
+        });
+
+        $loop->run();
     }
 }

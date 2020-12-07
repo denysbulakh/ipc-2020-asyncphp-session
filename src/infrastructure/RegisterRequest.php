@@ -12,6 +12,7 @@ class RegisterRequest
         $tries = 0;
 
         do {
+            sleep(1);
             $tries++;
             $result = rand(0, 5);
         } while ($result !== 1 && $tries < 5);
