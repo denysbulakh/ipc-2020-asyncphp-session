@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bulakh\Models;
 
-use Bulakh\Infrastructure\RegisterRequest;
+use React\EventLoop\LoopInterface;
+use React\ChildProcess\Process;
+use React\EventLoop\TimerInterface;
+use React\Promise\Deferred;
 
 class Registration
 {
@@ -17,9 +20,26 @@ class Registration
         $this->provider = $provider;
     }
 
-    public function register(): bool
+    public function register(LoopInterface $loop, Deferred $taskDeferred): void
     {
-        return RegisterRequest::send($this->getTicketCode(), $this->getProviderId());
+        $cmd = 'composer register-async -- ' . $this->getTicketCode() . ' ' . $this->getProviderId();
+        $process = new Process($cmd);
+        $process->start($loop);
+
+        $that = $this;
+        $loop->addPeriodicTimer(
+            0.5,
+            function(TimerInterface $timer) use ($process, $taskDeferred, $loop, $that) {
+                if (!$process->isRunning()) {
+                    if ($process->getExitCode() === 0) {
+                        $taskDeferred->resolve($that);
+                    } else {
+                        $taskDeferred->reject();
+                    }
+                    $loop->cancelTimer($timer);
+                }
+            }
+        );
     }
 
     public function getTicketCode(): string

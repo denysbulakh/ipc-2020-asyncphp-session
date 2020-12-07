@@ -61,3 +61,8 @@
 `git checkout step-1`
 - Promises
 - React PHP
+
+### Step 2
+`git checkout step-2`
+- EventLoop
+- ChildProcess

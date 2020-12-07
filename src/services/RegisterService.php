@@ -10,6 +10,7 @@ use Bulakh\Models\Provider;
 use Bulakh\Infrastructure\ProvidersRepository;
 use Bulakh\Models\Registration;
 use React\Promise\Deferred;
+use React\EventLoop\Factory;
 
 class RegisterService
 {
@@ -17,6 +18,8 @@ class RegisterService
 
     public static function registerBooking(Booking $booking)
     {
+        $loop = Factory::create();
+
         /** @var Provider $provider */
         foreach (ProvidersRepository::getArray() as $provider) {
             $taskDeferred = new Deferred();
@@ -36,12 +39,9 @@ class RegisterService
             self::$pendingRegistrationTasks[] = $taskDeferred;
 
             $registration = new Registration($booking, $provider);
-            $result = $registration->register();
-            if ($result) {
-                $taskDeferred->resolve($registration);
-            } else {
-                $taskDeferred->reject('Failed');
-            }
+            $registration->register($loop, $taskDeferred);
         }
+
+        $loop->run();
     }
 }
