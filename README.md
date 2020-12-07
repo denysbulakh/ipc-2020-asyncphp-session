@@ -17,3 +17,10 @@
 ## Why?
 
 #### PHP made synchronous
+
+### Asynchronious execution
+- Higher UI responsiveness
+- Timers
+- Repetitive processes
+- Listeners 
+- ...
