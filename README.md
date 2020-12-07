@@ -24,3 +24,9 @@
 - Repetitive processes
 - Listeners 
 - ...
+
+#### Problem 
+
+- Concurrent requests
+- Blocking I/O
+- DB deadlocks
