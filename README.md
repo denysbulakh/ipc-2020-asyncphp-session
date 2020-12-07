@@ -30,3 +30,6 @@
 - Concurrent requests
 - Blocking I/O
 - DB deadlocks
+
+#### Solution?
+- Queuing 
