@@ -11,3 +11,9 @@
 - Booking software for Leisure activity providers
 - PHP, MySQL, MongoDB, Elasticsearch, Magento
 - NodeJS, ReactJS, Kafka, k8, AWS
+
+# Asynchronious PHP
+
+## Why?
+
+#### PHP made synchronous
