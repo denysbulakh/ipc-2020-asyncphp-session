@@ -45,3 +45,13 @@
 - RabbitMQ
 - Amazon SQS
 - Kafka
+
+### ReactPHP
+- Promises
+- Event loop
+- Child processes
+
+### Swoole
+- Coroutines
+- Channels
+- Multiprocessing
