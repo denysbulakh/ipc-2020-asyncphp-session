@@ -39,3 +39,9 @@
 - Faster input/output
 - Importing/exporting
 - ...
+
+## How?
+### Message broker
+- RabbitMQ
+- Amazon SQS
+- Kafka
