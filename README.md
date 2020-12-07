@@ -33,3 +33,9 @@
 
 #### Solution?
 - Queuing 
+
+### Parallel execution
+- Process performance
+- Faster input/output
+- Importing/exporting
+- ...
