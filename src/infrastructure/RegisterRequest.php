@@ -3,19 +3,17 @@ declare(strict_types=1);
 
 namespace Bulakh\Infrastructure;
 
-use Bulakh\Services\LoggingService;
-
 class RegisterRequest
 {
-    public static function send(string $ticketCode, string $providerId): void
+    public static function send(string $ticketCode, string $providerId): bool
     {
+        $tries = 0;
+
         do {
-            $result = boolval(rand(0, 1));
-            if ($result) {
-                LoggingService::getLogger()->info("Registered", [$ticketCode, $providerId]);
-            } else {
-                LoggingService::getLogger()->info("Failed", [$ticketCode, $providerId]);
-            }
-        } while (!$result);
+            $tries++;
+            $result = rand(0, 5);
+        } while ($result !== 1 && $tries < 5);
+
+        return $result === 1;
     }
 }

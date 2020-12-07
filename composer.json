@@ -19,6 +19,7 @@
         "booking-create": "Bulakh\\Services\\BookingService::createBookingCmd"
     },
     "require": {
-        "monolog/monolog": "^2.1"
+        "monolog/monolog": "^2.1",
+        "react/promise": "^2.8"
     }
 }

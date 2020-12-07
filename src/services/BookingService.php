@@ -3,35 +3,59 @@ declare(strict_types=1);
 
 namespace Bulakh\Services;
 
+require __DIR__ . '/../../vendor/autoload.php';
+
 use Bulakh\Models\Booking;
-use Bulakh\Models\Provider;
 use Bulakh\Models\Ticket;
-use Bulakh\Infrastructure\ProvidersRepository;
+use React\Promise\Deferred;
 
 class BookingService
 {
-    public static function createBooking(): Booking
+    public static function createBookingPromise(): Deferred
+    {
+        $deferred = new Deferred();
+        $deferred->promise()
+            ->then(function (Booking $booking) use ($deferred) {
+                $ticket = new Ticket();
+                $booking->setTicket($ticket);
+                return $booking;
+            })
+            ->then(function (Booking $booking) use ($deferred) {
+                RegisterService::registerBooking($booking);
+                return $booking;
+            })
+            ->then(function (Booking $booking) use ($deferred) {
+                $booking->save();
+                return $booking;
+            });
+
+        return $deferred;
+    }
+
+    public static function createBooking(Deferred $deferredBooking): void
     {
         $booking = new Booking();
-        $ticket = new Ticket();
-        /** @var Provider $provider */
-        foreach (ProvidersRepository::getArray() as $provider) {
-            $provider->register($ticket);
-            $booking->addProvider($provider);
-        }
-        $booking->setTicket($ticket);
-        $booking->save();
-
-        return $booking;
+        $deferredBooking->resolve($booking);
     }
 
     public static function createBookingCmd(): void
     {
         $timeMarker = microtime(true);
 
-        echo json_encode([
-            'booking' => self::createBooking()->getInfo(),
-            'execution_time' => round(microtime(true) - $timeMarker, 3),
-        ], JSON_PRETTY_PRINT);
+        $deferredBooking = self::createBookingPromise();
+
+        $deferredBooking->promise()->done(
+            function (Booking $booking) use ($timeMarker) {
+                echo json_encode([
+                    'booking' => $booking->getInfo(),
+                    'execution_time' => round(microtime(true) - $timeMarker, 3),
+                ], JSON_PRETTY_PRINT);
+            },
+            function ($reason) {
+                LoggingService::getLogger()->info("Booking failed", [$reason]);
+            }
+        );
+
+        self::createBooking($deferredBooking);
     }
 }

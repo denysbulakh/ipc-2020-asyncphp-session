@@ -19,9 +19,4 @@ class Provider
     {
         return $this->id;
     }
-
-    public function register(Ticket $ticket): void
-    {
-        RegisterRequest::send($ticket->getCode(), $this->getId());
-    }
 }
