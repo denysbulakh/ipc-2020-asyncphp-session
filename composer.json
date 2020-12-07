@@ -17,7 +17,8 @@
     },
     "scripts": {
         "booking-create": "Bulakh\\Services\\BookingService::createBookingCmd",
-        "register-async": "Bulakh\\Infrastructure\\RegisterRequest::asyncSend"
+        "register-async": "Bulakh\\Infrastructure\\RegisterRequest::asyncSend",
+        "start-server": "Bulakh\\Infrastructure\\BookingServer::createBookingServerCmd"
     },
     "require": {
         "monolog/monolog": "^2.1",

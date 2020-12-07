@@ -15,10 +15,10 @@ use React\EventLoop\Factory;
 
 class RegisterService
 {
-    protected static $pendingRegistrationTasks = [];
-
     public static function registerBooking(Booking $booking, Deferred $deferred, LoopInterface $loop)
     {
+        $pendingRegistrationTasks = [];
+
         /** @var Provider $provider */
         foreach (ProvidersRepository::getArray() as $provider) {
             $taskDeferred = new Deferred();
@@ -35,7 +35,7 @@ class RegisterService
                     }
                 );
 
-            self::$pendingRegistrationTasks[] = $taskDeferred;
+            $pendingRegistrationTasks[] = $taskDeferred;
 
             $registration = new Registration($booking, $provider);
             $registration->register($loop, $taskDeferred);
@@ -43,7 +43,7 @@ class RegisterService
 
         $promiseAny = \React\Promise\any(array_map(function(Deferred $item) {
             return $item->promise();
-        }, self::$pendingRegistrationTasks));
+        }, $pendingRegistrationTasks));
 
         $promiseAny->then(function() use ($booking, $deferred) {
             $deferred->resolve($booking);

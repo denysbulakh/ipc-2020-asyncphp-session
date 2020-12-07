@@ -11,6 +11,8 @@ RUN touch /usr/local/etc/php/conf.d/swoole.ini && \
     echo 'extension=swoole.so' > /usr/local/etc/php/conf.d/swoole.ini
 RUN php --ri swoole
 
+EXPOSE 8080
+
 COPY . /usr/src/asyncphp
 WORKDIR /usr/src/asyncphp
-CMD [ "composer", "booking-create" ]
+CMD [ "composer", "start-server" ]

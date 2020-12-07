@@ -10,6 +10,7 @@ use Bulakh\Models\Ticket;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
+use Swoole\Http\Response;
 
 class BookingService
 {
@@ -34,7 +35,7 @@ class BookingService
         RegisterService::registerBooking($booking, $deferredBooking, $loop);
     }
 
-    public static function createBookingCmd(): void
+    public static function createBookingCmd(Response $response): void
     {
         $timeMarker = microtime(true);
 
@@ -42,11 +43,11 @@ class BookingService
         $deferredBooking = self::createBookingPromise($loop);
 
         $deferredBooking->promise()->done(
-            function (Booking $booking) use ($timeMarker) {
-                echo json_encode([
+            function (Booking $booking) use ($timeMarker, $response) {
+                $response->end(json_encode([
                     'booking' => $booking->getInfo(),
                     'execution_time' => round(microtime(true) - $timeMarker, 3),
-                ], JSON_PRETTY_PRINT);
+                ], JSON_PRETTY_PRINT));
             },
             function ($reason) {
                 LoggingService::getLogger()->info("Booking failed", [$reason]);
