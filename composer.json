@@ -1,0 +1,24 @@
+{
+    "name": "denysbulakh/asyncphp",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Denys Bulakh",
+            "email": "denys@bulakhweb.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Bulakh\\Models\\": "src/models",
+            "Bulakh\\Services\\": "src/services",
+            "Bulakh\\Infrastructure\\": "src/infrastructure"
+        }
+    },
+    "scripts": {
+        "booking-create": "Bulakh\\Services\\BookingService::createBookingCmd"
+    },
+    "require": {
+        "monolog/monolog": "^2.1"
+    }
+}
