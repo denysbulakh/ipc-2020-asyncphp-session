@@ -84,3 +84,11 @@
 ### Step 6
 `git checkout step-6`
 - Swoole Server
+
+### Thank you!
+
+## Questions?
+### Denys Bulakh
+- denys@bulakhweb.com
+- https://github.com/denisbulakh/ipc-2020-asyncphp-session
+- https://www.linkedin.com/in/denysbulakh/
