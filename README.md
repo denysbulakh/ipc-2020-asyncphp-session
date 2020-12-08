@@ -8,6 +8,7 @@
  
 
 ### Regiondo
+#### Jochen Schweizer Mydays Group
 - Booking software for Leisure activity providers
 - PHP, MySQL, MongoDB, Elasticsearch, Magento
 - NodeJS, ReactJS, Kafka, k8, AWS
@@ -92,3 +93,7 @@
 - denys@bulakhweb.com
 - https://github.com/denisbulakh/ipc-2020-asyncphp-session
 - https://www.linkedin.com/in/denysbulakh/
+
+### Regiondo / Jochen Schweizer Mydays Group
+- https://regiondo.com
+- https://partner.jsmd-group.com
